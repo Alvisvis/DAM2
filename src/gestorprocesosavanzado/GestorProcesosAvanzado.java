@@ -19,6 +19,69 @@ public class GestorProcesosAvanzado {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+//        ejecutablesWindows();
+//        lanzarPins();
+
+    }
+
+    public static void lanzarPins() {
+        Scanner sc = new Scanner(System.in);
+        int op_;
+        System.out.println("""
+                           \u00bfA quien le quieres lanzar un Ping?
+                           1- Microsoft 
+                           2- Apple """);
+        op_ = sc.nextInt();
+        switch (op_) {
+            case 1:
+                try {
+                    ProcessBuilder pb = new ProcessBuilder("ping", "-n", "4", "www.microsoft.com");
+                    Process proceso = pb.start();
+
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(proceso.getInputStream())
+                    );
+                    String linea;
+                    int cont = 0;
+                    while ((linea = reader.readLine()) != null) {
+
+                        if (cont < 4) {
+                            System.out.println(linea);
+                            cont++;
+                        }
+                    }
+
+                    int exitCode = proceso.waitFor();
+                    System.out.println("El proceso termino con codigo: " + exitCode);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+                
+            case 2:
+                try {
+                    ProcessBuilder pb = new ProcessBuilder("ping", "-n", "4", "www.apple.com");
+                    Process proceso = pb.start();
+
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(proceso.getInputStream())
+                    );
+                    String linea;
+                    int cont = 0;
+                    while ((linea = reader.readLine()) != null) {
+
+                        if (cont < 4) {
+                            System.out.println(linea);
+                            cont++;
+                        }
+                    }
+                    int exitCode = proceso.waitFor();
+                    System.out.println("El proceso termino con codigo: " + exitCode);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
     }
 
     public static void ejecutablesWindows() {
@@ -38,7 +101,7 @@ public class GestorProcesosAvanzado {
             case 1:
                 try {
                     // Ejecutar 'ping' a google.com 3 veces
-                    ProcessBuilder pb = new ProcessBuilder("ping", "-n", "3", "www.google.com");
+                    ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir", "/b");
                     Process proceso = pb.start();
 
                     // Leer la salida del comando
@@ -55,38 +118,51 @@ public class GestorProcesosAvanzado {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 break;
+                
             case 2:
                 try {
-                    // Abrir el Bloc de notas
-                    Process proceso = Runtime.getRuntime().exec("notepad.exe");
+                    // Ejecutar 'ping' a google.com 3 veces
+                    ProcessBuilder pb = new ProcessBuilder("whoami", "/user");
+                    Process proceso = pb.start();
 
-                    // Esperar a que el usuario cierre el Bloc de notas
-                    proceso.waitFor();
+                    // Leer la salida del comando
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(proceso.getInputStream())
+                    );
+                    String linea;
+                    while ((linea = reader.readLine()) != null) {
+                        System.out.println(linea);
+                    }
 
-                    System.out.println("El proceso Notepad ha terminado.");
+                    int exitCode = proceso.waitFor();
+                    System.out.println("El proceso terminó con código: " + exitCode);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 break;
+                
             case 3:
                 try {
-                    // Abrir el Bloc de notas
-                    Process proceso = Runtime.getRuntime().exec("notepad.exe");
+                    // Ejecutar 'ping' a google.com 3 veces
+                    ProcessBuilder pb = new ProcessBuilder("ipconfig", "/all");
+                    Process proceso = pb.start();
 
-                    // Esperar a que el usuario cierre el Bloc de notas
-                    proceso.waitFor();
+                    // Leer la salida del comando
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(proceso.getInputStream())
+                    );
+                    String linea;
+                    while ((linea = reader.readLine()) != null) {
+                        System.out.println(linea);
+                    }
 
-                    System.out.println("El proceso Notepad ha terminado.");
+                    int exitCode = proceso.waitFor();
+                    System.out.println("El proceso terminó con código: " + exitCode);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 break;
-            default:
-                throw new AssertionError();
         }
     }
 
