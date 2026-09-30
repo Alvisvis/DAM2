@@ -5,8 +5,10 @@
 package gestorprocesosavanzado;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Scanner;
+import java.io.OutputStreamWriter;
 
 /**
  *
@@ -18,152 +20,179 @@ public class GestorProcesosAvanzado {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-//        ejecutablesWindows();
-//        lanzarPins();
+        // Lanzamos todos los procesos
+        Process dir = lanzarDir();
+        Process whoami = lanzarWhoami();
+        Process ipconfig = lanzarIpconfig();
+        Process pingMicrosoft = lanzarPingMicro();
+        Process pingApple = lanzarPingApple();
 
+        // Esperamos
+        try {
+            dir.waitFor();
+            whoami.waitFor();
+            ipconfig.waitFor();
+            pingMicrosoft.waitFor();
+            pingApple.waitFor();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        lanzarEco();
     }
 
-    public static void lanzarPins() {
-        Scanner sc = new Scanner(System.in);
-        int op_;
-        System.out.println("""
-                           \u00bfA quien le quieres lanzar un Ping?
-                           1- Microsoft 
-                           2- Apple """);
-        op_ = sc.nextInt();
-        switch (op_) {
-            case 1:
-                try {
-                    ProcessBuilder pb = new ProcessBuilder("ping", "-n", "4", "www.microsoft.com");
-                    Process proceso = pb.start();
+    public static void lanzarEco() {
+        try {
+            String java = System.getProperty("java.home") + "\\bin\\java";
+            String classpath = System.getProperty("java.class.path");
 
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(proceso.getInputStream())
-                    );
-                    String linea;
-                    int cont = 0;
-                    while ((linea = reader.readLine()) != null) {
+            ProcessBuilder pb = new ProcessBuilder(java, "-cp", classpath, "EcoDatos");
 
-                        if (cont < 4) {
-                            System.out.println(linea);
-                            cont++;
-                        }
-                    }
+            Process proceso = pb.start();
+            BufferedWriter wr = new BufferedWriter(
+                    new OutputStreamWriter(proceso.getOutputStream()));
 
-                    int exitCode = proceso.waitFor();
-                    System.out.println("El proceso termino con codigo: " + exitCode);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-                
-            case 2:
-                try {
-                    ProcessBuilder pb = new ProcessBuilder("ping", "-n", "4", "www.apple.com");
-                    Process proceso = pb.start();
+            wr.write("Hola EcoDatos");
+            wr.newLine();
 
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(proceso.getInputStream())
-                    );
-                    String linea;
-                    int cont = 0;
-                    while ((linea = reader.readLine()) != null) {
+            wr.close();
 
-                        if (cont < 4) {
-                            System.out.println(linea);
-                            cont++;
-                        }
-                    }
-                    int exitCode = proceso.waitFor();
-                    System.out.println("El proceso termino con codigo: " + exitCode);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
+            BufferedReader le = new BufferedReader(new InputStreamReader(proceso.getInputStream()));
+
+            String linea;
+            while ((linea = le.readLine()) != null) {
+                System.out.println(linea);
+            }
+
+            le.close();
+            int codigo = proceso.waitFor();
+            System.out.println("EcoDatos terminó: " + codigo);
+
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Error " + e.getMessage());
         }
     }
 
-    public static void ejecutablesWindows() {
-        Scanner sc = new Scanner(System.in);
-        int op_;
-        System.out.println("""
-                           \u00bfQue utilidad quieres usar?
-                           1- cmd/c dir/b 
-                                (ejecuta un listado simple de archivos)
-                           2- whoami /user 
-                                (muestra el usuario actual)
-                           3- ipconfig /all 
-                                (muestra la configuracion de red completa)""");
-        op_ = sc.nextInt();
+    private static Process lanzarDir() {
+        try {
+            // Ejecutar 'ping' a google.com 3 veces
+            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir", "/b");
+            Process proceso = pb.start();
 
-        switch (op_) {
-            case 1:
-                try {
-                    // Ejecutar 'ping' a google.com 3 veces
-                    ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "dir", "/b");
-                    Process proceso = pb.start();
+            // Leer la salida del comando
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(proceso.getInputStream())
+            );
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                System.out.println(linea);
+            }
 
-                    // Leer la salida del comando
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(proceso.getInputStream())
-                    );
-                    String linea;
-                    while ((linea = reader.readLine()) != null) {
-                        System.out.println(linea);
-                    }
-
-                    int exitCode = proceso.waitFor();
-                    System.out.println("El proceso terminó con código: " + exitCode);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-                
-            case 2:
-                try {
-                    // Ejecutar 'ping' a google.com 3 veces
-                    ProcessBuilder pb = new ProcessBuilder("whoami", "/user");
-                    Process proceso = pb.start();
-
-                    // Leer la salida del comando
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(proceso.getInputStream())
-                    );
-                    String linea;
-                    while ((linea = reader.readLine()) != null) {
-                        System.out.println(linea);
-                    }
-
-                    int exitCode = proceso.waitFor();
-                    System.out.println("El proceso terminó con código: " + exitCode);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-                
-            case 3:
-                try {
-                    // Ejecutar 'ping' a google.com 3 veces
-                    ProcessBuilder pb = new ProcessBuilder("ipconfig", "/all");
-                    Process proceso = pb.start();
-
-                    // Leer la salida del comando
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(proceso.getInputStream())
-                    );
-                    String linea;
-                    while ((linea = reader.readLine()) != null) {
-                        System.out.println(linea);
-                    }
-
-                    int exitCode = proceso.waitFor();
-                    System.out.println("El proceso terminó con código: " + exitCode);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
+            return proceso;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
+    private static Process lanzarIpconfig() {
+        try {
+            ProcessBuilder pb = new ProcessBuilder("ipconfig", "/all");
+            Process proceso = pb.start();
+
+            // Leer la salida del comando
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(proceso.getInputStream())
+            );
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                System.out.println(linea);
+            }
+
+            return proceso;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static Process lanzarWhoami() {
+        try {
+            // Ejecutar 'ping' a google.com 3 veces
+            ProcessBuilder pb = new ProcessBuilder("whoami", "/user");
+            Process proceso = pb.start();
+
+            // Leer la salida del comando
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(proceso.getInputStream())
+            );
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                System.out.println(linea);
+            }
+
+            return proceso;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Lanza ping a www.microsoft.com
+     *
+     * @return proceso
+     */
+    public static Process lanzarPingMicro() {
+        try {
+            ProcessBuilder pb = new ProcessBuilder("ping", "-n", "4", "www.microsoft.com");
+            Process proceso = pb.start();
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(proceso.getInputStream())
+            );
+            String linea;
+            int cont = 0;
+            while ((linea = reader.readLine()) != null) {
+
+                if (cont < 4) {
+                    System.out.println(linea);
+                    cont++;
+                }
+            }
+            return proceso;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Lanza ping a www.apple.com
+     *
+     * @return proceso
+     */
+    public static Process lanzarPingApple() {
+        try {
+            ProcessBuilder pb = new ProcessBuilder("ping", "-n", "4", "www.apple.com");
+            Process proceso = pb.start();
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(proceso.getInputStream())
+            );
+            String linea;
+            int cont = 0;
+            while ((linea = reader.readLine()) != null) {
+
+                if (cont < 4) {
+                    System.out.println(linea);
+                    cont++;
+                }
+            }
+            return proceso;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
