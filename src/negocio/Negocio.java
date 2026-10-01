@@ -15,59 +15,92 @@ import java.util.Scanner;
  */
 public class Negocio {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
-
         ConexionSQL gestor = new ConexionSQL();
-        ResultSet nombresEmpresas = gestor.nombresEmpresas();
-        try {
-            while (nombresEmpresas.next()) {
-                String nombreEmpresa = nombresEmpresas.getString("nombreCli");
-                System.out.println(nombreEmpresa);
-            }
 
-        } catch (SQLException e) {
-            e.getMessage();
-        }
-        
-        Scanner sc = new Scanner(System.in);        
-        System.out.println("¿Que tipo de la tabla quieres seleccionar?");
-        String tipo = sc.next();
-        System.out.println("¿Cual es la tabla?");
-        String tabla = sc.next();
-        nombresEmpresas = gestor.pedirDatos(tipo, tabla);
-        
-        try {
-            while (nombresEmpresas.next()) {
-                String nombreEmpresa = nombresEmpresas.getString(tipo);
-                System.out.println(nombreEmpresa);
-            }
+//        selectDefault(gestor);
+//        selectPersonalizado(gestor);
+        updateDefault(gestor);
+    }
 
+    /**
+     * Metodo que muestra los nombre de los clientes de la tabla Cliente
+     *
+     * @param gestor
+     */
+    public static void selectDefault(ConexionSQL gestor) {
+        ResultSet tiendaMusica = gestor.selectTienda();
+        try {
+            while (tiendaMusica.next()) {
+                String nombreCliente = tiendaMusica.getString("nombreCli");
+                System.out.println(nombreCliente);
+            }
         } catch (SQLException e) {
             e.getMessage();
         }
         gestor.cerrarConexion();
+
+    }
+
+    /**
+     * Metodo que muestra los datos que pidas de la tabla que digas
+     *
+     * @param gestor
+     */
+    public static void selectPersonalizado(ConexionSQL gestor) {
+        Scanner sc = new Scanner(System.in);
+        ResultSet tiendaMusica = gestor.selectTienda();
+
+        System.out.println("¿Que tipo de la tabla quieres seleccionar?");
+        String tipo = sc.next();
+
+        System.out.println("¿Cual es la tabla?");
+        String tabla = sc.next();
+        tiendaMusica = gestor.pedirDatos(tipo, tabla);
+
+        try {
+            while (tiendaMusica.next()) {
+                String nombreCliente = tiendaMusica.getString(tipo);
+                System.out.println(nombreCliente);
+            }
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+        gestor.cerrarConexion();
+    }
+
+    public static void updateDefault(ConexionSQL gestor) {
+        ResultSet tiendaMusica = gestor.selectTienda();
+        System.out.println("Entra 1");
+        try {
+            while (tiendaMusica.next()) {
+
+                System.out.println("Entra 2");
+                String nombreCli = tiendaMusica.getString("nombreCli");
+                System.out.println(nombreCli);
+                int numVinilosReservado = tiendaMusica.getInt("numVinilosReservado");
+                System.out.println(numVinilosReservado);
+
+                if (tiendaMusica.getString("nombreCli").equals("Juan Antonio")) {
+                    tiendaMusica.updateInt("numVinilosReservado", 2);
+                    tiendaMusica.updateRow();
+                }
+
+//            tiendaMusica.moveToInsertRow();
+//            tiendaMusica.updateString("nombre", "Empresita");
+//            tiendaMusica.updateString("ceo", "Paco");
+//            tiendaMusica.insertRow();
+//            System.out.println(nombrePro);
+//            System.out.println(tiendaMusica);
 //
-//        Cliente cl = new Cliente("Alvis", "64654174", "alvivis@gmail.com", 1);
-//        Cliente c2 = new Cliente("Jose", "4877216", "Josejojo@gmail.com", 2);
-//        System.out.println(cl.toString());
-//        System.out.println(c2.toString());
-//
-//        Producto p1 = new Producto(1, "Camisa de Quevedo", 50, "Camisa");
-//        Producto p2 = new Producto(2, "DTMF", 50, "Vinilo");
-//        System.out.println(p1.toString());
-//        System.out.println(p2.toString());
-//
-//        ArrayList<Producto> productos = new ArrayList();
-//        productos.add(p1);
-//        productos.add(p2);
-//
-//        Pedido q1 = new Pedido(cl, p2);
-//
-//        System.out.println(q1.toString());
-//    }
+//            tiendaMusica.absolute(1);
+//            tiendaMusica.deleteRow();
+            }
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+
+        gestor.cerrarConexion();
+
     }
 }

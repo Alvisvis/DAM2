@@ -51,18 +51,33 @@ public class ConexionSQL {
         }
     }
 
-    public ResultSet nombresEmpresas() {
+    public ResultSet selectTienda() {
 
-        String sql = "SELECT nombreCli FROM cliente";
+        String sql = "SELECT * FROM cliente";
         try {
 
-            Statement sentencia = conn1.createStatement();
+            Statement sentencia = conn1.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            );
 
             ResultSet rs = sentencia.executeQuery(sql);
             return rs;
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ResultSet updateTienda() {
+
+        try {
+            Statement st = conn1.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+            return st.executeQuery("SELECT * FROM tienda");
+        } catch (SQLException e) {
+            e.getMessage();
             return null;
         }
     }
@@ -81,4 +96,5 @@ public class ConexionSQL {
             return null;
         }
     }
+
 }
