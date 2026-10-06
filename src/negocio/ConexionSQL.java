@@ -70,7 +70,6 @@ public class ConexionSQL {
         }
     }
 
-
     public ResultSet pedirDatos(String tipo, String tabla) {
 
         String sql = "SELECT " + tipo + " FROM " + tabla;
@@ -86,4 +85,56 @@ public class ConexionSQL {
         }
     }
 
+    public void eliminarCliente(String nombre) {
+
+        String sql = "DELETE FROM cliente WHERE idCliente = " + nombre;
+
+        System.out.println(sql);
+        try {
+            Statement sentencia = conn1.createStatement();
+
+            int filas = sentencia.executeUpdate(sql);
+
+            if (filas > 0) {
+                System.out.println("Cliente eliminado correctamente.");
+            } else {
+                System.out.println("No se ha encontrado ningún alumno.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ResultSet insertarCliente(int idCliente, String nombreCli, String telefono, String correo, int numVinilos) {
+
+        String sql = "SELECT * FROM cliente";
+
+        try {
+
+            Statement sentencia = conn1.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            );
+
+            ResultSet rs = sentencia.executeQuery(sql);
+
+            rs.moveToInsertRow();
+
+            rs.updateInt("idCliente", idCliente);
+            rs.updateString("nombreCli", nombreCli);
+            rs.updateString("telefono", telefono);
+            rs.updateString("correoEletronico", correo);
+            rs.updateInt("numVinilosReservado", numVinilos);
+            rs.insertRow();
+
+            System.out.println("Cliente insertado correctamente.");
+
+            return rs;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

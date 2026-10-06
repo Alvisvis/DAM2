@@ -6,6 +6,7 @@ package negocio;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,9 +19,14 @@ public class Negocio {
     public static void main(String[] args) {
         ConexionSQL gestor = new ConexionSQL();
 
-        selectDefault(gestor);
-        selectPersonalizado(gestor);
-        updateDefault(gestor);
+//        selectDefault(gestor);
+//        selectPersonalizado(gestor);
+//        updateDefault(gestor);
+//        eliminarCliente(gestor);
+//        insertarCliente(gestor);
+
+        gestor.cerrarConexion();
+
     }
 
     /**
@@ -36,9 +42,8 @@ public class Negocio {
                 System.out.println(nombreCliente);
             }
         } catch (SQLException e) {
-            e.getMessage();
+            e.printStackTrace();
         }
-        gestor.cerrarConexion();
 
     }
 
@@ -49,14 +54,13 @@ public class Negocio {
      */
     public static void selectPersonalizado(ConexionSQL gestor) {
         Scanner sc = new Scanner(System.in);
-        ResultSet tiendaMusica = gestor.selectTienda();
 
         System.out.println("¿Que tipo de la tabla quieres seleccionar?");
         String tipo = sc.next();
 
         System.out.println("¿Cual es la tabla?");
         String tabla = sc.next();
-        tiendaMusica = gestor.pedirDatos(tipo, tabla);
+        ResultSet tiendaMusica = gestor.pedirDatos(tipo, tabla);
 
         try {
             while (tiendaMusica.next()) {
@@ -64,9 +68,8 @@ public class Negocio {
                 System.out.println(nombreCliente);
             }
         } catch (SQLException e) {
-            e.getMessage();
+            e.printStackTrace();
         }
-        gestor.cerrarConexion();
     }
 
     public static void updateDefault(ConexionSQL gestor) {
@@ -85,22 +88,44 @@ public class Negocio {
                     tiendaMusica.updateInt("numVinilosReservado", 2);
                     tiendaMusica.updateRow();
                 }
-
-//            tiendaMusica.moveToInsertRow();
-//            tiendaMusica.updateString("nombre", "Empresita");
-//            tiendaMusica.updateString("ceo", "Paco");
-//            tiendaMusica.insertRow();
-//            System.out.println(nombrePro);
-//            System.out.println(tiendaMusica);
-//
-//            tiendaMusica.absolute(1);
-//            tiendaMusica.deleteRow();
             }
         } catch (SQLException e) {
-            e.getMessage();
+            e.printStackTrace();
         }
 
-        gestor.cerrarConexion();
+    }
 
+    public static void eliminarCliente(ConexionSQL gestor) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Introduce el nombre del cliente que quieres eliminar:");
+        String nombre = sc.nextLine();
+
+        gestor.eliminarCliente(nombre);
+    }
+
+    public static void insertarCliente(ConexionSQL gestor) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Introduce el ID del cliente:");
+        int idCliente = sc.nextInt();
+
+        sc.nextLine();
+
+        System.out.println("Introduce el nombre del cliente:");
+        String nombreCli = sc.nextLine();
+
+        System.out.println("Introduce el teléfono:");
+        String telefono = sc.nextLine();
+
+        System.out.println("Introduce el correo electrónico:");
+        String correo = sc.nextLine();
+
+        System.out.println("Introduce el número de vinilos reservados:");
+        int numVinilos = sc.nextInt();
+
+        gestor.insertarCliente(idCliente, nombreCli, telefono, correo, numVinilos);
     }
 }
