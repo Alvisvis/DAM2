@@ -18,8 +18,8 @@ public class Negocio {
     public static void main(String[] args) {
         ConexionSQL gestor = new ConexionSQL();
 
-//        selectDefault(gestor);
-//        selectPersonalizado(gestor);
+        selectDefault(gestor);
+        selectPersonalizado(gestor);
         updateDefault(gestor);
     }
 

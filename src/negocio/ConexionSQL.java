@@ -70,17 +70,6 @@ public class ConexionSQL {
         }
     }
 
-    public ResultSet updateTienda() {
-
-        try {
-            Statement st = conn1.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-
-            return st.executeQuery("SELECT * FROM tienda");
-        } catch (SQLException e) {
-            e.getMessage();
-            return null;
-        }
-    }
 
     public ResultSet pedirDatos(String tipo, String tabla) {
 
