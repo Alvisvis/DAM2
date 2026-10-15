@@ -9,10 +9,10 @@ package CRUD_2;
  * @author 2DAM
  */
 import crud_corregido.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+
 import java.sql.Statement;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  *
@@ -21,38 +21,35 @@ import java.sql.Statement;
 public class Test {
 
     public static void main(String[] args) {
-        String url_ = "jdbc:mysql://localhost:3306/";
-        String nombreBD_ = "camping";
-        String usuario_ = "root";
-        String pass_ = "";
+       
 
         //Este try es para crear la base de datos SI NO EXISTE
-        try (Connection conn = DriverManager.getConnection(url_, usuario_, pass_); Statement st = conn.createStatement()) {
-
-            st.executeUpdate("CREATE DATABASE IF NOT EXISTS " + nombreBD_);
-            System.out.println("Base de datos " + nombreBD_ + " creada.");
-
-        } catch (SQLException e) {
-            System.out.println("Error al crear la base de datos: " + e.getMessage());
-
-        }
-
-        //Esto es para conectarnos a la BD, ya creada
-        String urlDB = url_ + nombreBD_;
-        try (Connection conn = DriverManager.getConnection(urlDB, usuario_, pass_); Statement st = conn.createStatement()) {
-
-            String sqlCrearTabla = "CREATE TABLE IF NOT EXISTS parcela_camping ("
-            + "id INT AUTO_INCREMENT PRIMARY KEY, "
-            + "nombre VARCHAR(255) NOT NULL, "
-            + "capacidad INT NOT NULL, "
-            + "tieneElectricidad BOOLEAN NOT NULL, "
-            + "precioNoche DOUBLE NOT NULL, "
-            + "descrip VARCHAR(255) NOT NULL, "
-            + "disponible BOOLEAN NOT NULL"
-            + ")";
-            st.executeUpdate(sqlCrearTabla);
-            System.out.println("Tabla parcela_cammping creada");
-            
+        try (Connection conn = conexion.conectar()) {
+//
+//            st.executeUpdate("CREATE DATABASE IF NOT EXISTS " + nombreBD_);
+//            System.out.println("Base de datos " + nombreBD_ + " creada.");
+//
+//        } catch (SQLException e) {
+//            System.out.println("Error al crear la base de datos: " + e.getMessage());
+//
+//        }
+//
+//        //Esto es para conectarnos a la BD, ya creada
+//        String urlDB = url_ + nombreBD_;
+//        try (Connection conn = DriverManager.getConnection(urlDB, usuario_, pass_); Statement st = conn.createStatement()) {
+//
+//            String sqlCrearTabla = "CREATE TABLE IF NOT EXISTS parcela_camping ("
+//            + "id INT AUTO_INCREMENT PRIMARY KEY, "
+//            + "nombre VARCHAR(255) NOT NULL, "
+//            + "capacidad INT NOT NULL, "
+//            + "tieneElectricidad BOOLEAN NOT NULL, "
+//            + "precioNoche DOUBLE NOT NULL, "
+//            + "descrip VARCHAR(255) NOT NULL, "
+//            + "disponible BOOLEAN NOT NULL"
+//            + ")";
+//            st.executeUpdate(sqlCrearTabla);
+//            System.out.println("Tabla parcela_cammping creada");
+//            
             ParcelaCamping_DAO dao = new ParcelaCamping_DAO();
             
             ParcelaCamping_DTO pc1  = new ParcelaCamping_DTO("Parcela Buitre", 4, true, 32.0, "Tiene sombra", true);
