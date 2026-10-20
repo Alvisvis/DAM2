@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -16,28 +17,51 @@ import java.sql.SQLException;
  */
 public class ParcelaDAO {
 
-    Connection conn1 = null;
+    private static Connection conn1;
+    private static String url_ = "jdbc:mysql://localhost:3306/";
+    private static String urlBD_ = "jdbc:mysql://localhost:3306/parcelaCamping";
+    private static String usuario_ = "root";
+    private static String pass_ = "";
 
-    public void ConexionSQL() {
-        try {
-            String url_ = "jdbc:mysql://localhost:3306/";
-            String usuario_ = "root";
-            String pass_ = "";
+    public static void CreateBDyTabla(ParcelaCampingMejorado pcM) {
 
-            conn1 = DriverManager.getConnection(url_, usuario_, pass_);
+        try (Connection conn = DriverManager.getConnection(url_, usuario_, pass_); Statement st = conn.createStatement()) {
 
-            if (conn1 != null) {
-                System.out.println("Conectado a tu tienda musical");
-            }
+            st.executeUpdate("CREATE DATABASE IF NOT EXISTS parcelaCamping");
+            System.out.println("Base de datos parcelaCamping creada.");
 
         } catch (SQLException e) {
-            System.out.println("Error: La direccion, usuario o contraseña no son validas.");
+            System.out.println("Error al crear la base de datos: " + e.getMessage());
+
+        }
+
+        //Esto es para conectarnos a la BD, ya creada
+        try (Connection conn = DriverManager.getConnection(urlBD_, usuario_, pass_); Statement st = conn.createStatement()) {
+
+            String sqlCrearTabla = "CREATE TABLE IF NOT EXISTS parcela_camping ("
+                    + "id INT AUTO_INCREMENT PRIMARY KEY, "
+                    + "nombre VARCHAR(255) NOT NULL,"
+                    + "capacidad INT NOT NULL,"
+                    + "tieneEletricidad BOOLEAN NOT NULL,"
+                    + "precioNoche DOUBLE NOT NULL,"
+                    + "descrip VARCHAR(255) NOT NULL,"
+                    + "disponible BOOLEAN NOT NULL"
+                    + ");";
+            st.executeUpdate(sqlCrearTabla);
+            System.out.println("Tabla parcela_camping creada");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
-    
-    public void create(Parcela parcela, Connection conn) {
+
+    public static void create(Parcela parcela, Connection conn) {
         String sql = "INSERT INTO parcela_camping "
-                + "(nombre, capacidad, tieneEletricidad, precioNoche, descrip, disponible)"
+                + "(nombre, "
+                + "capacidad, "
+                + "tieneEletricidad, "
+                + "precioNoche, "
+                + "descrip, "
+                + "disponible)"
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -47,7 +71,7 @@ public class ParcelaDAO {
             ps.setDouble(4, parcela.getPrecioNoche());
             ps.setString(5, parcela.getDescrip());
             ps.setBoolean(6, parcela.isDisponible());
-            
+
             ps.executeUpdate();
             System.out.println("Parcela insertada");
 
@@ -56,7 +80,7 @@ public class ParcelaDAO {
         }
     }
 
-    public Parcela read(Connection conn, int idBuscado) {
+    public static Parcela read(Connection conn, int idBuscado) {
         Parcela parcela = null;
 
         String sql = "SELECT * FROM parcela_camping WHERE id = ?";
@@ -68,11 +92,11 @@ public class ParcelaDAO {
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                parcela = new Parcela(rs.getString("nombre"), 
-                        rs.getInt("capacidad"), 
-                        rs.getBoolean("tieneEletricidad"), 
-                        rs.getDouble("precioNoche"), 
-                        rs.getString("descrip"), 
+                parcela = new Parcela(rs.getString("nombre"),
+                        rs.getInt("capacidad"),
+                        rs.getBoolean("tieneEletricidad"),
+                        rs.getDouble("precioNoche"),
+                        rs.getString("descrip"),
                         rs.getBoolean("disponible"));
             }
 
@@ -82,7 +106,7 @@ public class ParcelaDAO {
         return parcela;
     }
 
-    public void delete(Connection conn, int idBuscado) {
+    public static void delete(Connection conn, int idBuscado) {
 
         String sql = "DELETE FROM parcela_camping WHERE id = ?";
 
@@ -98,13 +122,24 @@ public class ParcelaDAO {
         }
     }
 
-    public Parcela update(Connection conn,
-            int idBuscado, String nombre, int capacidad,
+    public static Parcela update(Connection conn,
+            int idBuscado,
+            String nombre,
+            int capacidad,
             boolean tieneEletricidad,
-            String descrip, double PrecioNoche, boolean disponible) {
+            String descrip,
+            double PrecioNoche,
+            boolean disponible) {
 
         Parcela pcActualizada = new Parcela(nombre, capacidad, tieneEletricidad, PrecioNoche, descrip, disponible);
-        String sql = "UPDATE parcela_camping SET nombre = ?, capacidad = ?, tieneEletricidad = ?, precioNoche = ?, descrip = ?, disponible = ? WHERE id = ?";
+        String sql = "UPDATE parcela_camping "
+                + "SET nombre = ?, "
+                + "capacidad = ?, "
+                + "tieneEletricidad = ?, "
+                + "precioNoche = ?, "
+                + "descrip = ?, "
+                + "disponible = ? "
+                + "WHERE id = ?";
 
         try {
             PreparedStatement ps = conn.prepareStatement(sql);

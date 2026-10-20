@@ -8,11 +8,11 @@ import java.sql.Connection;
  */
 public class ParcelaCampingMejorado {
 
-    public static void main(String[] args) {
-        Connection conn1 = null;
-        
-        
-
-    }
+    private static ParcelaCampingMejorado pcM;
     
+    public static void main(String[] args) {
+        
+        ParcelaDAO.CreateBDyTabla(pcM);
+    }
+
 }
