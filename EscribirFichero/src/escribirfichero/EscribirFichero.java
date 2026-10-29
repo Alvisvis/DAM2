@@ -45,6 +45,7 @@ public class EscribirFichero {
             String fecha = diaStr + "/" + mesStr + "/" + anio;
          }
      }
+      //Con el .appendd, poner bien
      
      
      
