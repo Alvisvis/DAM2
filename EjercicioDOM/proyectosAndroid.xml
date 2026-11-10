@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proyectos fechaGeneracion="2025-11-16" curso="DAM-Android" xmlns:meta="http://example.org/meta">
+  <proyecto id="P001" entregado="true" lenguaje="Java" nota="8.5">
+    <alumno>
+      <nombre>Laura Martínez</nombre>
+      <email>laura.martinez@example.com</email>
+      <grupo>A</grupo>
+    </alumno>
+    <titulo>Calculadora avanzada</titulo>
+    <descripcion>Calculadora con manejo de errores, decimales y historial.</descripcion>
+    <fechaEntrega>2025-10-24</fechaEntrega>
+    <componentes>
+      <componente tipo="UI">Activity principal, fragmentos</componente>
+      <componente tipo="persistencia">SharedPreferences</componente>
+    </componentes>
+    <meta:archivos>
+      <archivo>src/MainActivity.java</archivo>
+      <archivo>res/layout/activity_main.xml</archivo>
+    </meta:archivos>
+  </proyecto>
+
+  <proyecto id="P002" entregado="true" lenguaje="Kotlin" nota="9.0">
+    <alumno>
+      <nombre>Diego Ramos</nombre>
+      <email>diego.ramos@example.com</email>
+      <grupo>B</grupo>
+    </alumno>
+    <titulo>Agenda de contactos</titulo>
+    <descripcion>Agenda con guardado en fichero interno y edición.</descripcion>
+    <fechaEntrega>2025-10-24</fechaEntrega>
+    <componentes>
+      <componente tipo="persistencia">Fichero interno (.txt)</componente>
+      <componente tipo="UI">ListView con adaptador</componente>
+    </componentes>
+    <meta:archivos>
+      <archivo>src/ContactsActivity.kt</archivo>
+      <archivo>res/layout/list_item.xml</archivo>
+    </meta:archivos>
+  </proyecto>
+
+  <proyecto id="P003" entregado="false" lenguaje="Java" nota="">
+    <alumno>
+      <nombre>María Gómez</nombre>
+      <email>maria.gomez@example.com</email>
+      <grupo>A</grupo>
+    </alumno>
+    <titulo>Bloc de notas sencillo</titulo>
+    <descripcion>Bloc con crear/leer/guardar en almacenamiento interno.</descripcion>
+    <fechaEntrega>2025-11-10</fechaEntrega>
+    <componentes>
+      <componente tipo="persistencia">Fichero interno</componente>
+      <componente tipo="UI">EditText, botones</componente>
+    </componentes>
+    <meta:archivos>
+      <archivo>src/NotesActivity.java</archivo>
+    </meta:archivos>
+  </proyecto>
+
+  <proyecto id="P004" entregado="true" lenguaje="Java" nota="6.0">
+    <alumno>
+      <nombre>Javier Torres</nombre>
+      <email>j.torres@example.com</email>
+      <grupo>C</grupo>
+    </alumno>
+    <titulo>WebView informativa</titulo>
+    <descripcion>App que carga contenido web local y externo con WebView.</descripcion>
+    <fechaEntrega>2025-10-25</fechaEntrega>
+    <componentes>
+      <componente tipo="web">WebView</componente>
+    </componentes>
+    <meta:archivos>
+      <archivo>src/WebActivity.java</archivo>
+      <archivo>assets/info.html</archivo>
+    </meta:archivos>
+  </proyecto>
+
+  <proyecto id="P005" entregado="true" lenguaje="Kotlin" nota="7.5">
+    <alumno>
+      <nombre>Ana Ruiz</nombre>
+      <email>ana.ruiz@example.com</email>
+      <grupo>B</grupo>
+    </alumno>
+    <titulo>FestivalFinder (mini)</titulo>
+    <descripcion>App que muestra festivales por país; uso de Spinner y ListView.</descripcion>
+    <fechaEntrega>2025-10-23</fechaEntrega>
+    <componentes>
+      <componente tipo="UI">Spinner, ListView</componente>
+      <componente tipo="persistencia">SharedPreferences (filtro favorito)</componente>
+    </componentes>
+    <meta:archivos>
+      <archivo>src/MainActivity.kt</archivo>
+      <archivo>res/values/strings.xml</archivo>
+    </meta:archivos>
+  </proyecto>
+</proyectos>
+
