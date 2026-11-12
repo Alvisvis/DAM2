@@ -2,12 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package recetas;
 
 /**
  *
  * @author 2DAM
  */
-public class recetasDAO {
+public class IngredienteDAO {
     
+    public void insertarIngrediente (Connection conn, Ingrediente ingrediente){
+        
+    }    
 }
