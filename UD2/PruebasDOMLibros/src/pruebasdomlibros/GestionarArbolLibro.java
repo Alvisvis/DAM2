@@ -142,11 +142,37 @@ public class GestionarArbolLibro {
 
             //Realizar la transformación
             transformer.transform(domSource, streamResult);
-            
+
         } catch (IllegalArgumentException | TransformerException e) {
             System.out.println(e.getMessage().toString());
         }
 
     }
+    //DELEGADO PANCHET
+    public void aumentarNotaProyecto(String id, double aumento) {
+        NodeList proyectos
+                = doc.getElementsByTagName("proyecto");
 
+        for (int i = 0; i < proyectos.getLength(); i++) {
+
+            Element proyecto = (Element) proyectos.item(i);
+
+            if (proyecto.getAttribute("id").equals(id)) {
+
+                NodeList notas
+                        = proyecto.getElementsByTagName("nota");
+
+                if (notas.getLength() > 0) {
+
+                    double nota = Double.parseDouble(
+                            notas.item(0).getTextContent());
+
+                    nota = Math.min(10, nota + aumento);
+
+                    notas.item(0).setTextContent(
+                            String.valueOf(nota));
+                }
+            }
+        }
+    }
 }
