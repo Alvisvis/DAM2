@@ -28,6 +28,8 @@ public class MainLibro {
             System.out.println("No se ha pordido cargar el archivo xml");
         }
                 
+        //Crear el fichero XML
+        gestor.escribirXML("nuevoLibros.xml");
     }
     
 }
